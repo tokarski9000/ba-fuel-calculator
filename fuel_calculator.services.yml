@@ -1,0 +1,3 @@
+services:
+  fuel_calculator:
+    class: Drupal\fuel_calculator\Service\FuelCalculator

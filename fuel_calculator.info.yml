@@ -3,3 +3,5 @@ type: module
 description: 'Form for calculating fuel cost and consumption'
 package: Custom
 core_version_requirement: ^10 || ^11
+dependencies:
+  - drupal:rest

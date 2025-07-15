@@ -1,0 +1,7 @@
+fuel_calculator:
+  version: VERSION
+  js:
+    js/fuel_calculator.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

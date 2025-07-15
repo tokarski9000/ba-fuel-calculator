@@ -1,0 +1,12 @@
+fuel_calculator.settings:
+  title: 'Fuel Calculator Settings'
+  description: 'Configure the fuel calculator settings.'
+  parent: system.admin_config_services
+  route_name: fuel_calculator.settings
+  weight: 100
+  menu_name: admin
+  options:
+    class: 'menu--fuel-calculator-settings'
+    attributes:
+      class:
+        - 'menu-item--fuel-calculator-settings'
