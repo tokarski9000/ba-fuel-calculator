@@ -2,6 +2,7 @@ name: 'Fuel calculator'
 type: module
 description: 'Form for calculating fuel cost and consumption'
 package: Custom
+configure: fuel_calculator.settings
 core_version_requirement: ^10 || ^11
 dependencies:
   - drupal:rest

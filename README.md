@@ -1,16 +1,11 @@
 ## INTRODUCTION
 
-The Fuel calculator module is a DESCRIBE_THE_MODULE_HERE.
-
-The primary use case for this module is:
-
-- Use case #1
-- Use case #2
-- Use case #3
+The Fuel Calculator module is a custom Drupal module designed to assist users in estimating fuel costs for their journeys. By leveraging a REST API endpoint, it calculates the total fuel cost and consumption based on user-provided inputs such as distance, fuel efficiency, and fuel price. This module is ideal for websites or applications that require fuel cost estimation functionality.
 
 ## REQUIREMENTS
 
-DESCRIBE_MODULE_DEPENDENCIES_HERE
+- Drupal 10/11
+- Rest
 
 ## INSTALLATION
 
@@ -18,12 +13,68 @@ Install as you would normally install a contributed Drupal module.
 See: https://www.drupal.org/node/895232 for further information.
 
 ## CONFIGURATION
-- Configuration step #1
-- Configuration step #2
-- Configuration step #3
+
+- /admin/config/services/fuel-calculator - This where you can set default values for the calculator.
+
+## REST API INSTRUCTION
+
+The Fuel Calculator module provides a REST API endpoint for fuel calculation. Below are the details:
+
+### Endpoint
+
+`POST /api/fuel-calculate`
+
+### Request Format
+
+The API expects a JSON payload with the following structure:
+```json
+{
+  "distance_travelled": <number>, // Distance to be traveled (in kilometers)
+  "fuel_consumption": <number>, // Fuel efficiency of the vehicle (liters per 100km)
+  "price_per_liter": <number> // Price of fuel per liter
+}
+```
+
+### Response Format
+
+The API returns a JSON response with the calculated fuel cost:
+```json
+{
+  "fuel_cost": <number>, // Total cost of fuel for the given distance
+  "fuel_spent": <number> // Total amount of fuel burnt for the given distance
+}
+```
+
+### Example Request Payload
+
+```json
+{
+    "distance_travelled": "100",
+    "fuel_consumption": "5",
+    "price_per_liter": "10"
+}
+```
+
+### Example Response
+
+```json
+{
+    "fuel_cost": 50,
+    "fuel_spent": 5
+}
+```
+
+### Notes
+
+- Ensure the REST module is enabled and configured properly.
+- Authentication may be required depending on your site's configuration.
+- Validate input data to avoid calculation errors.
+- Ensure correct permissions are enabled for this resource.
+
+
 
 ## MAINTAINERS
 
-Current maintainers for Drupal 10:
+Current maintainers for this module:
 
-- FIRST_NAME LAST_NAME (NICKNAME) - https://www.drupal.org/u/NICKNAME
+- Rafal Tokarski - https://www.drupal.org/u/rafaltokarski

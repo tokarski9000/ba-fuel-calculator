@@ -16,11 +16,6 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-/**
- * Represents entities as resources.
- *
- * @see \Drupal\rest\Plugin\Deriver\EntityDeriver
- */
 #[RestResource(
   id: "fuel_calculate_resource",
   label: new TranslatableMarkup("Fuel Calculate Resource"),

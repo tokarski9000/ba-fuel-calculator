@@ -162,7 +162,7 @@ final class FuelCalculatorForm extends FormBase {
     $config = $this->config(SettingsForm::CONFIG_NAME);
     $param = $this->requestStack->getCurrentRequest()?->get($key);
 
-    if ($param && is_numeric($param)) {
+    if ($param !== NULL && is_numeric($param)) {
       return (float) $param;
     }
 
