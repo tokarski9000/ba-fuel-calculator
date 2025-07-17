@@ -16,6 +16,9 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * Provides a REST resource for calculating fuel costs.
+ */
 #[RestResource(
   id: "fuel_calculate_resource",
   label: new TranslatableMarkup("Fuel Calculate Resource"),

@@ -1,6 +1,11 @@
 ## INTRODUCTION
 
-The Fuel Calculator module is a custom Drupal module designed to assist users in estimating fuel costs for their journeys. By leveraging a REST API endpoint, it calculates the total fuel cost and consumption based on user-provided inputs such as distance, fuel efficiency, and fuel price. This module is ideal for websites or applications that require fuel cost estimation functionality.
+The Fuel Calculator module is a custom Drupal module designed to assist users in
+estimating fuel costs for their journeys. By leveraging a REST API endpoint, it
+calculates the total fuel cost and consumption based on user-provided inputs
+such as distance, fuel efficiency, and fuel price.
+This module is ideal for websites or applications that require fuel cost
+estimation functionality.
 
 ## REQUIREMENTS
 
@@ -14,11 +19,11 @@ See: https://www.drupal.org/node/895232 for further information.
 
 ## CONFIGURATION
 
-- /admin/config/services/fuel-calculator - This where you can set default values for the calculator.
+- /admin/config/services/fuel-calculator - Settings for default form values.
 
 ## REST API INSTRUCTION
 
-The Fuel Calculator module provides a REST API endpoint for fuel calculation. Below are the details:
+The Fuel Calculator module provides a REST API endpoint for fuel calculation.
 
 ### Endpoint
 
@@ -30,7 +35,7 @@ The API expects a JSON payload with the following structure:
 ```json
 {
   "distance_travelled": <number>, // Distance to be traveled (in kilometers)
-  "fuel_consumption": <number>, // Fuel efficiency of the vehicle (liters per 100km)
+  "fuel_consumption": <number>, // Fuel efficiency (liters per 100km)
   "price_per_liter": <number> // Price of fuel per liter
 }
 ```
