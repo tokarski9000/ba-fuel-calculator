@@ -58,7 +58,7 @@ final class FuelCalculateResource extends ResourceBase {
       $plugin_id,
       $plugin_definition,
       $serializer_formats,
-      $container->get('logger.factory')->get('fuel_calculate_resource'),
+      $container->get('logger.factory')->get('fuel_calculator_resource'),
       $container->get('fuel_calculator'),
       $container->get('current_user'),
       $container->get('request_stack'),
@@ -82,33 +82,47 @@ final class FuelCalculateResource extends ResourceBase {
    *   The calculated fuel cost response.
    */
   public function post(array $data): ResourceResponse {
+    $user_name = !empty($this->currentUser->getAccountName()) ? $this->currentUser->getAccountName() : 'anonymous';
+    $ip = $this->requestStack->getCurrentRequest()?->getClientIp() ?? 'unknown';
     try {
       $fuel_data = FuelDataVO::fromArray($data);
     }
     catch (\InvalidArgumentException $e) {
-      $this->logger->error('Invalid input data: @message', ['@message' => $e->getMessage()]);
+      $this->logger->error('
+        Invalid input data error: @message,
+        Data: @data,
+        Ip: @ip,
+        User: @user',
+        [
+          '@message' => $e->getMessage(),
+          '@data' => json_encode($data),
+          '@ip' => $ip,
+          '@user' => $user_name,
+        ]
+      );
+
       return new ResourceResponse(['error' => $e->getMessage()], 400);
     }
 
-    $fuel_cost = $this->fuelCalculator->getFuelCost($fuel_data->distanceTravelled, $fuel_data->fuelConsumption, $fuel_data->costPerLiter);
+    $fuel_cost = $this->fuelCalculator->getFuelCost($fuel_data->distanceTravelled, $fuel_data->fuelConsumption, $fuel_data->pricePerLiter);
     $fuel_spent = $this->fuelCalculator->getFuelSpent($fuel_data->distanceTravelled, $fuel_data->fuelConsumption);
 
     $this->logger->info('
-    Ip: @ip,
-    User: @user,
-    Distance travelled: @distance,
-    Fuel consumption: @consumption,
-    Price per liter: @price,
-    Fuel cost calculated: @cost,
-    Fuel spent: @spent', [
-      '@ip' => $this->requestStack->getCurrentRequest()?->getClientIp() ?? 'unknown',
-      '@user' => $this->currentUser->getAccountName(),
-      '@distance' => $fuel_data->distanceTravelled,
-      '@consumption' => $fuel_data->fuelConsumption,
-      '@price' => $fuel_data->costPerLiter,
-      '@cost' => $fuel_cost,
-      '@spent' => $fuel_spent,
-    ]);
+      Success,
+      Data: @data,
+      Fuel cost calculated: @cost,
+      Fuel spent: @spent,
+      Ip: @ip,
+      User: @user',
+      [
+        '@data' => json_encode($data),
+        '@cost' => $fuel_cost,
+        '@spent' => $fuel_spent,
+        '@ip' => $ip,
+        '@user' => $user_name,
+      ]
+    );
+
     return new ResourceResponse([
       FuelKeys::FuelCost->value => $fuel_cost,
       FuelKeys::FuelSpent->value => $fuel_spent,

@@ -9,6 +9,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\fuel_calculator\Enum\FuelKeys;
 use Drupal\fuel_calculator\Service\FuelCalculator;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -20,6 +21,7 @@ final class FuelCalculatorForm extends FormBase {
 
   public function __construct(
     RequestStack $requestStack,
+    protected LoggerInterface $logger,
     protected FuelCalculator $fuelCalculator,
   ) {
     $this->requestStack = $requestStack;
@@ -31,7 +33,8 @@ final class FuelCalculatorForm extends FormBase {
   public static function create(ContainerInterface $container): static {
     return new static(
       $container->get('request_stack'),
-      $container->get('fuel_calculator')
+      $container->get('logger.factory')->get('fuel_calculator_form'),
+      $container->get('fuel_calculator'),
     );
   }
 
@@ -130,10 +133,20 @@ final class FuelCalculatorForm extends FormBase {
     $distance = (float) $form_state->getValue(FuelKeys::DistanceTravelled->value);
     $consumption = (float) $form_state->getValue(FuelKeys::FuelConsumption->value);
     $price = (float) $form_state->getValue(FuelKeys::PricePerLiter->value);
+    $fuel_spent = $this->fuelCalculator->getFuelSpent($distance, $consumption);
+    $fuel_cost = $this->fuelCalculator->getFuelCost($distance, $consumption, $price);
 
-    $form_state->setValue(FuelKeys::FuelSpent->value, $this->fuelCalculator->getFuelSpent($distance, $consumption));
-    $form_state->setValue(FuelKeys::FuelCost->value, $this->fuelCalculator->getFuelCost($distance, $consumption, $price));
+    $form_state->setValue(FuelKeys::FuelSpent->value, $fuel_spent);
+    $form_state->setValue(FuelKeys::FuelCost->value, $fuel_cost);
     $form_state->setRebuild(TRUE);
+
+    $this->logSubmission([
+      FuelKeys::DistanceTravelled->value => $distance,
+      FuelKeys::FuelConsumption->value => $consumption,
+      FuelKeys::PricePerLiter->value => $price,
+      FuelKeys::FuelSpent->value => $fuel_spent,
+      FuelKeys::FuelCost->value => $fuel_cost,
+    ]);
   }
 
   /**
@@ -159,6 +172,29 @@ final class FuelCalculatorForm extends FormBase {
     }
 
     return NULL;
+  }
+
+  /**
+   * Log the submission data.
+   *
+   * @param array $data
+   *   The data submitted in the form.
+   */
+  protected function logSubmission(array $data): void {
+    $user_name = $this->currentUser()->getAccountName() ?: 'anonymous';
+    $ip = $this->requestStack->getCurrentRequest()?->getClientIp() ?? 'unknown';
+
+    $this->logger->info('
+      Fuel Calculator submission,
+      Data: @data,
+      Ip: @ip,
+      User: @user',
+      [
+        '@data' => json_encode($data),
+        '@ip' => $ip,
+        '@user' => $user_name,
+      ]
+    );
   }
 
 }

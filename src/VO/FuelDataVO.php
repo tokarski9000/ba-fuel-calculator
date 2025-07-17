@@ -21,10 +21,10 @@ final class FuelDataVO {
   public function __construct(
     public float $distanceTravelled,
     public float $fuelConsumption,
-    public float $costPerLiter,
+    public float $pricePerLiter,
   ) {
     // Ensure that distance travelled and fuel consumption are non-negative.
-    if ($distanceTravelled < 0 || $fuelConsumption < 0 || $costPerLiter < 0) {
+    if ($distanceTravelled < 0 || $fuelConsumption < 0 || $pricePerLiter < 0) {
       throw new \InvalidArgumentException('Distance travelled, fuel consumption, and cost per liter must be non-negative.');
     }
   }
