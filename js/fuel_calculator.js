@@ -10,7 +10,7 @@
   FuelCalculator.prototype.reset = function () {
     this.$resetButton.addEventListener('click', (e) => {
       e.preventDefault();
-      const $inputs = this.$form.querySelectorAll('input[type="number"]');
+      const $inputs = this.$form.querySelectorAll('input[type="number"], input[type="text"]');
       $inputs.forEach((input) => {
         input.value = '';
       });
@@ -27,4 +27,3 @@
     }
   }
 })(Drupal, once);
-console.log('wokjdosakdo')

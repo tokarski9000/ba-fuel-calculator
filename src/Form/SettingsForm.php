@@ -6,6 +6,7 @@ namespace Drupal\fuel_calculator\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\fuel_calculator\Enum\FuelKeys;
 
 /**
  * Configure settings for zerobounce.
@@ -39,26 +40,26 @@ class SettingsForm extends ConfigFormBase {
     /** @var \Drupal\Core\Config\Config $config */
     $config = $this->config(self::CONFIG_NAME);
 
-    $form['distance_travelled'] = [
+    $form[FuelKeys::DistanceTravelled->value] = [
       '#type' => 'number',
       '#title' => $this->t('Distance Travelled'),
-      '#default_value' => $config->get('distance_travelled') ?? '',
+      '#default_value' => $config->get(FuelKeys::DistanceTravelled->value) ?? '',
       '#description' => $this->t('Enter the distance travelled in kilometers.'),
     ];
 
-    $form['fuel_consumption'] = [
+    $form[FuelKeys::FuelConsumption->value] = [
       '#type' => 'number',
       '#step' => '0.1',
       '#title' => $this->t('Fuel Consumption'),
-      '#default_value' => $config->get('fuel_consumption') ?? '',
+      '#default_value' => $config->get(FuelKeys::FuelConsumption->value) ?? '',
       '#description' => $this->t('Enter the fuel consumption in liters per 100 kilometers.'),
     ];
 
-    $form['price_per_liter'] = [
+    $form[FuelKeys::PricePerLiter->value] = [
       '#type' => 'number',
       '#step' => '0.01',
       '#title' => $this->t('Fuel Price'),
-      '#default_value' => $config->get('price_per_liter') ?? '',
+      '#default_value' => $config->get(FuelKeys::PricePerLiter->value) ?? '',
       '#description' => $this->t('Enter the fuel price in your local currency per liter.'),
     ];
 

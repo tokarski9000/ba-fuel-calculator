@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - fuel_calculator
+    - serialization
+    - user
+id: fuel_calculate_resource
+plugin_id: fuel_calculate_resource
+granularity: method
+configuration:
+  POST:
+    supported_formats:
+      - json
+    supported_auth:
+      - cookie

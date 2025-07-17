@@ -10,57 +10,79 @@ namespace Drupal\fuel_calculator\Service;
 final class FuelCalculator {
 
   /**
+   * Multiplier for float to int conversion.
+   *
+   * @var int
+   */
+  const int MULTIPLIER = 1000;
+
+  /**
    * Calculate the amount of fuel spent based on distance and consumption.
    *
-   * @param float $float_distance
+   * @param float $distance
    *   The distance travelled in kilometers.
-   * @param float $float_consumption
+   * @param float $consumption
    *   The fuel consumption in liters per 100 kilometers.
    *
    * @return float
    *   The amount of fuel spent in liters.
    */
-  public function calculateFuelSpent(float $float_distance, float $float_consumption): float {
+  public function getFuelSpent(float $distance, float $consumption): float {
     // Validate inputs.
-    if ($float_distance < 0 || $float_consumption < 0) {
+    if ($distance < 0 || $consumption < 0) {
       throw new \InvalidArgumentException('Distance and consumption must be non-negative.');
     }
 
-    $distance = $float_distance * 1000;
-    $consumption = $float_consumption * 1000;
-
-    $litersUsed = ($distance / 100) * $consumption / 1000;
-
-    return round($litersUsed, 2);
+    return round(
+      $this->getLiterUsed($distance, $consumption), 1);
   }
 
   /**
    * Calculate the total fuel cost based on distance, consumption, and price.
    *
-   * @param float $float_distance
+   * @param float $distance
    *   The distance travelled in kilometers.
-   * @param float $float_consumption
+   * @param float $consumption
    *   The fuel consumption in liters per 100 kilometers.
-   * @param float $float_price
+   * @param float $price
    *   The price of fuel per liter.
    *
    * @return float
    *   The total fuel cost.
    */
-  public function calculateFuelCost(float $float_distance, float $float_consumption, float $float_price): float {
-    // Validate inputs.
-    if ($float_distance < 0 || $float_consumption < 0 || $float_price < 0) {
+  public function getFuelCost(
+    float $distance,
+    float $consumption,
+    float $price,
+  ): float {
+    if ($distance < 0 || $consumption < 0 || $price < 0) {
       throw new \InvalidArgumentException('Distance, consumption, and price must be non-negative.');
     }
 
-    $distance = $float_distance * 1000;
-    $consumption = $float_consumption * 1000;
-    $price = $float_price * 1000;
+    $price = $price * self::MULTIPLIER;
+    $litersUsed = $this->getLiterUsed($distance, $consumption) * self::MULTIPLIER;
+    $totalCost = ($litersUsed * $price) /
+                 (self::MULTIPLIER * self::MULTIPLIER);
 
-    $litersUsed = ($distance / 100) * $consumption / 1000;
-    $totalCost = $litersUsed * $price;
+    return round($totalCost, 1);
+  }
 
-    return round($totalCost, 2);
+  /**
+   * Calculate the amount of fuel used based on distance and consumption.
+   *
+   * @param float $distance
+   *   The distance travelled in kilometers.
+   * @param float $consumption
+   *   The fuel consumption in liters per 100 kilometers.
+   *
+   * @return float
+   *   The amount of fuel used in liters.
+   */
+  protected function getLiterUsed(float $distance, float $consumption): float {
+    // Calculate liter used and return to original units.
+    return (($distance * self::MULTIPLIER / 100) * ($consumption * self::MULTIPLIER)) /
+           (self::MULTIPLIER * self::MULTIPLIER);
+
   }
 
 }
