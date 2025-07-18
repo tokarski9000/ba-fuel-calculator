@@ -1,0 +1,3 @@
+access fuel_calculator_form:
+  title: 'Access the Fuel Calculator form'
+  restrict access: true
