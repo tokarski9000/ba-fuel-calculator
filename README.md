@@ -21,6 +21,14 @@ See: https://www.drupal.org/node/895232 for further information.
 
 - /admin/config/services/fuel-calculator - Settings for default form values.
 
+## FORM URL
+
+- /fuel-calculator - Form dedicated page.
+
+## FORM BLOCK
+
+`Fuel Calculator Form` - name of the Fuel Calculator Block
+
 ## REST API INSTRUCTION
 
 The Fuel Calculator module provides a REST API endpoint for fuel calculation.
