@@ -57,7 +57,7 @@ final class FuelCalculateResource extends ResourceBase {
       $plugin_definition,
       $serializer_formats,
       $container->get('logger.factory')->get('fuel_calculator_resource'),
-      $container->get('fuel_calculator'),
+      $container->get('fuel_calculator.fuel_calculator'),
       $container->get('current_user'),
       $container->get('request_stack'),
     );

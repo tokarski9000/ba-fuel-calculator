@@ -34,7 +34,7 @@ final class FuelCalculatorForm extends FormBase {
     return new static(
       $container->get('request_stack'),
       $container->get('logger.factory')->get('fuel_calculator_form'),
-      $container->get('fuel_calculator'),
+      $container->get('fuel_calculator.fuel_calculator'),
     );
   }
 
